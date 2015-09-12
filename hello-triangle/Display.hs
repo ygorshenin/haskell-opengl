@@ -9,8 +9,8 @@ import Graphics.Rendering.OpenGL (($=))
 import qualified Graphics.Rendering.OpenGL as GL
 import qualified Graphics.UI.GLFW as GLFW
 
-import Context
 import Y.Buffers
+import Y.Context
 import Y.Shaders
 
 vertices :: [GL.Vertex2 GL.GLfloat]
@@ -37,7 +37,7 @@ display ctxRef = do
   let loop = do
       GLFW.pollEvents
       ctx <- readIORef ctxRef
-      unless (ctxShutdown ctx) $ do
+      unless (ctxQuit ctx) $ do
           GL.clearColor $= GL.Color4 0.2 0.3 0.3 1
           GL.clear [GL.ColorBuffer]
 

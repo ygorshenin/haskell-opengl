@@ -1,4 +1,4 @@
-module Context (Context (..), defaultContext) where
+module Y.Context (Context (..), defaultContext) where
 
 data Context = Context { ctxQuit :: Bool } deriving (Show, Eq)
 

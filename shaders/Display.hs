@@ -6,9 +6,8 @@ import Graphics.Rendering.OpenGL (($=))
 import qualified Graphics.Rendering.OpenGL as GL
 import qualified Graphics.UI.GLFW as GLFW
 
-import Context
-
 import Y.Buffers
+import Y.Context
 import Y.Shaders
 
 display :: IORef Context -> IO ()
