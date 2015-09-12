@@ -1,6 +1,6 @@
-module Shaders ( ShaderInfo (..)
-               , mkProgram
-               )
+module Y.Shaders ( ShaderInfo (..)
+                 , mkProgram
+                 )
     where
 
 import Control.Monad

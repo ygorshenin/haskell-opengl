@@ -9,30 +9,25 @@ import qualified Graphics.UI.GLFW as GLFW
 import Context
 import Display
 
-keyPressed :: IORef Context -> GLFW.KeyCallback
+keyPressed :: IORef Context -> GLFW.Key -> GLFW.KeyButtonState -> IO ()
 keyPressed ctxRef (GLFW.SpecialKey GLFW.ESC) (GLFW.Press) = do
-  modifyIORef ctxRef $ \ctx -> ctx { ctxShutdown = True }
+  ctx <- readIORef ctxRef
+  writeIORef ctxRef $ ctx { ctxQuit = True }
 keyPressed _ _ _ = return ()
-
-resizeWindow :: GLFW.WindowSizeCallback
-resizeWindow size@(GL.Size w h) = do
-  GL.viewport $= (GL.Position 0 0, size)
 
 main :: IO ()
 main = do
-  let windowWidth = 800
-      windowHeight = 600
+  let windowSize = GL.Size 800 600
   GLFW.initialize
   GLFW.openWindowHint GLFW.OpenGLVersionMajor 3
   GLFW.openWindowHint GLFW.OpenGLVersionMinor 2
   GLFW.openWindowHint GLFW.OpenGLProfile GLFW.OpenGLCoreProfile
-  ok <- GLFW.openWindow (GL.Size windowWidth windowHeight) [GLFW.DisplayAlphaBits 8] GLFW.Window
-  unless ok $ fail "GLFW: can't create window."
-      
-  GLFW.windowTitle $= "OpenGL tutorial"
+
+  ok <- GLFW.openWindow windowSize [GLFW.DisplayAlphaBits 8] GLFW.Window
+  unless ok $ fail "GLFW: can't open window."
+
   ctxRef <- newIORef defaultContext
   GLFW.keyCallback $= keyPressed ctxRef
-  GLFW.windowSizeCallback $= resizeWindow
 
   display ctxRef
   GLFW.terminate
