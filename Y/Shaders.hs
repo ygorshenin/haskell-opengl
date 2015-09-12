@@ -8,10 +8,10 @@ import Graphics.Rendering.OpenGL (($=))
 import qualified Data.ByteString as BS
 import qualified Graphics.Rendering.OpenGL as GL
 
-data ShaderInfo = ShaderInfo FilePath GL.ShaderType
+data ShaderInfo = ShaderInfo FilePath GL.ShaderType deriving (Show)
 
 loadCompileAndAttach :: GL.Program -> ShaderInfo -> IO ()
-loadCompileAndAttach program (ShaderInfo shPath shType) = do
+loadCompileAndAttach program sh@(ShaderInfo shPath shType) = do
   source <- BS.readFile shPath
   shader <- GL.createShader shType
   GL.shaderSourceBS shader $= source
@@ -19,7 +19,7 @@ loadCompileAndAttach program (ShaderInfo shPath shType) = do
   ok <- GL.compileStatus shader
   unless ok $ do
     log <- GL.shaderInfoLog shader
-    fail log
+    fail $ "Can't build " ++ (show sh) ++ ":" ++ log
   GL.attachShader program shader
 
 mkProgram :: [ShaderInfo] -> IO GL.Program
